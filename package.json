@@ -16,11 +16,14 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@urql/vue": "^1.4.3",
+    "gql.tada": "^1.8.11",
     "pinia": "^3.0.3",
     "vue": "^3.5.17",
     "vue-router": "^4.5.1"
   },
   "devDependencies": {
+    "@gql.tada/vue-support": "^1.0.1",
     "@tsconfig/node22": "^22.0.2",
     "@types/jsdom": "^21.1.7",
     "@types/node": "^22.15.32",

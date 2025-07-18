@@ -4,7 +4,14 @@
   "exclude": ["src/**/__tests__/*"],
   "compilerOptions": {
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
-
+    "strict": true,
+    "plugins": [
+      {
+        "name": "gql.tada/ts-plugin",
+        "schema": "https://graphql.anilist.co",
+        "tadaOutputLocation": "./src/graphql/graphql-env.d.ts"
+      }
+    ],
     "paths": {
       "@/*": ["./src/*"]
     }
