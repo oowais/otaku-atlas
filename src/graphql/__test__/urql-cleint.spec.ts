@@ -1,5 +1,26 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { client } from "@/graphql/urql-client";
+
+vi.mock("@urql/vue", () => {
+  return {
+    Client: vi.fn(() => ({
+      query: vi.fn(() => ({
+        toPromise: vi.fn().mockResolvedValue({
+          data: {
+            Page: {
+              media: [
+                { id: 1, title: { romaji: "Mocked Title 1" } },
+                { id: 2, title: { romaji: "Mocked Title 2" } },
+              ],
+            },
+          },
+        }),
+      })),
+    })),
+    cacheExchange: vi.fn(() => "cacheExchange"),
+    fetchExchange: vi.fn(() => "fetchExchange"),
+  };
+});
 
 describe("GraphQL Client", () => {
   it("should export a working client instance", () => {
@@ -23,8 +44,9 @@ describe("GraphQL Client", () => {
 
     const response = await client.query(query, {}).toPromise();
 
-    expect(response.data).toBeDefined();
-    expect(response.data.Page).toBeDefined();
-    expect(response.data.Page.media).toBeInstanceOf(Array);
+    expect(response.data.Page.media).toEqual([
+      { id: 1, title: { romaji: "Mocked Title 1" } },
+      { id: 2, title: { romaji: "Mocked Title 2" } },
+    ]);
   });
 });
