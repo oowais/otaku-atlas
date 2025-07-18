@@ -1,4 +1,4 @@
-import { Client, cacheExchange, fetchExchange } from "@urql/vue";
+import { cacheExchange, Client, fetchExchange } from "@urql/vue";
 
 const ANILIST_API_URL = "https://graphql.anilist.co";
 
