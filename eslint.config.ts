@@ -2,8 +2,8 @@ import pluginVitest from "@vitest/eslint-plugin";
 import skipFormatting from "@vue/eslint-config-prettier/skip-formatting";
 import { defineConfigWithVueTs, vueTsConfigs } from "@vue/eslint-config-typescript";
 import { globalIgnores } from "eslint/config";
-import pluginImport from "eslint-plugin-import";
 import pluginOxlint from "eslint-plugin-oxlint";
+import simpleImportSort from "eslint-plugin-simple-import-sort";
 import pluginVue from "eslint-plugin-vue";
 
 export default defineConfigWithVueTs(
@@ -23,44 +23,16 @@ export default defineConfigWithVueTs(
   },
 
   {
-    name: "app/import-rules",
+    name: "app/import-sort",
     files: ["**/*.{ts,mts,tsx,vue}"],
     plugins: {
-      import: pluginImport,
+      "simple-import-sort": simpleImportSort,
     },
     rules: {
-      "import/order": [
-        "error",
-        {
-          groups: [
-            "builtin", // Node.js built-ins
-            "external", // npm packages
-            "internal", // @/ aliases
-            "parent", // ../
-            "sibling", // ./
-            "index", // ./index
-          ],
-          "newlines-between": "always",
-          alphabetize: {
-            order: "asc",
-            caseInsensitive: true,
-          },
-        },
-      ],
-      "import/newline-after-import": "error",
-      "import/no-duplicates": "error",
-      "sort-imports": [
-        "error",
-        {
-          ignoreCase: true,
-          ignoreDeclarationSort: true,
-          ignoreMemberSort: false,
-          memberSyntaxSortOrder: ["none", "all", "multiple", "single"],
-        },
-      ],
+      "simple-import-sort/imports": "error",
+      "simple-import-sort/exports": "error",
     },
   },
-
   // Custom Vue and TypeScript rules for better code quality
   {
     name: "app/vue-rules",
