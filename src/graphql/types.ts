@@ -1,10 +1,39 @@
-import type { ResultOf } from "gql.tada";
+import { graphql, type ResultOf } from "gql.tada";
 
-import { searchAnimeQuery } from "@/graphql/queries";
+const animeFieldsFragment = graphql(`
+  fragment AnimeFields on Media @_unmask {
+    id
+    title {
+      romaji
+      english
+    }
+    description
+    status
+    startDate {
+      year
+      month
+      day
+    }
+    endDate {
+      year
+      month
+      day
+    }
+    averageScore
+    popularity
+    coverImage {
+      large
+      medium
+      color
+    }
+  }
+`);
 
-type SearchAnimeQuery = ResultOf<typeof searchAnimeQuery>;
-type Anime = NonNullable<NonNullable<SearchAnimeQuery["Page"]>["media"]>[number];
+type Anime = NonNullable<ResultOf<typeof animeFieldsFragment>>;
 
-type SearchResult<T, E = Error> = { success: true; data: T } | { success: false; error: E };
+type SearchResult<T, E = Error> =
+  | { success: true; data: T }
+  | { success: false; error: E };
 
 export type { Anime, SearchResult };
+export { animeFieldsFragment };

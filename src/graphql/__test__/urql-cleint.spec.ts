@@ -1,4 +1,5 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
+
 import { client } from "@/graphql/urql-client";
 
 vi.mock("@urql/vue", () => {

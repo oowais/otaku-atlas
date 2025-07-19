@@ -1,7 +1,11 @@
 import pluginVitest from "@vitest/eslint-plugin";
 import skipFormatting from "@vue/eslint-config-prettier/skip-formatting";
-import { defineConfigWithVueTs, vueTsConfigs } from "@vue/eslint-config-typescript";
+import {
+  defineConfigWithVueTs,
+  vueTsConfigs,
+} from "@vue/eslint-config-typescript";
 import { globalIgnores } from "eslint/config";
+import pluginImport from "eslint-plugin-import";
 import pluginOxlint from "eslint-plugin-oxlint";
 import simpleImportSort from "eslint-plugin-simple-import-sort";
 import pluginVue from "eslint-plugin-vue";
@@ -27,10 +31,14 @@ export default defineConfigWithVueTs(
     files: ["**/*.{ts,mts,tsx,vue}"],
     plugins: {
       "simple-import-sort": simpleImportSort,
+      import: pluginImport,
     },
     rules: {
       "simple-import-sort/imports": "error",
       "simple-import-sort/exports": "error",
+      "import/first": "error",
+      "import/newline-after-import": "error",
+      "import/no-duplicates": "error",
     },
   },
   // Custom Vue and TypeScript rules for better code quality

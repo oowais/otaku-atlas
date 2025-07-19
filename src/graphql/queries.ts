@@ -1,42 +1,33 @@
 import { graphql } from "gql.tada";
 
-import type { Anime, SearchResult } from "@/graphql/types";
+import {
+  type Anime,
+  animeFieldsFragment,
+  type SearchResult,
+} from "@/graphql/types";
 import { client } from "@/graphql/urql-client";
 
-const searchAnimeQuery = graphql(`
-  query ($search: String!) {
-    Page {
-      media(search: $search, type: ANIME, sort: POPULARITY_DESC) {
-        id
-        title {
-          romaji
-          english
+const searchAnimeQuery = graphql(
+  `
+    query ($search: String!) {
+      Page {
+        media(search: $search, type: ANIME, sort: POPULARITY_DESC) {
+          ...AnimeFields
         }
       }
     }
-  }
-`);
-
-const getAnimeByIdQuery = graphql(`
-  query ($id: Int!) {
-    Media(id: $id, type: ANIME) {
-      id
-      # Proably need to add more fields here
-      title {
-        romaji
-        english
-      }
-      description
-    }
-  }
-`);
+  `,
+  [animeFieldsFragment],
+);
 
 async function searchAnime(search: string): Promise<SearchResult<Anime[]>> {
   try {
     const result = await client.query(searchAnimeQuery, { search });
+    const anime = result.data?.Page?.media ?? [];
+    const filteredAnime = anime.filter((item) => item !== null);
     return {
       success: true,
-      data: result.data?.Page?.media ?? [],
+      data: filteredAnime,
     };
   } catch (error) {
     console.error("Error occurred while searching for anime:", error);
@@ -47,12 +38,27 @@ async function searchAnime(search: string): Promise<SearchResult<Anime[]>> {
   }
 }
 
-async function getAnimeById(id: number): Promise<SearchResult<Anime | null>> {
+const getAnimeByIdsQuery = graphql(
+  `
+    query ($ids: [Int!]!) {
+      Page {
+        media(id_in: $ids, type: ANIME) {
+          ...AnimeFields
+        }
+      }
+    }
+  `,
+  [animeFieldsFragment],
+);
+
+async function getAnimeByIds(ids: number[]): Promise<SearchResult<Anime[]>> {
   try {
-    const result = await client.query(getAnimeByIdQuery, { id });
+    const result = await client.query(getAnimeByIdsQuery, { ids });
+    const anime = result.data?.Page?.media ?? [];
+    const filteredAnime = anime.filter((item) => item !== null);
     return {
       success: true,
-      data: result.data?.Media ?? null,
+      data: filteredAnime,
     };
   } catch (error) {
     console.error("Error occurred while fetching anime by ID:", error);
@@ -63,4 +69,4 @@ async function getAnimeById(id: number): Promise<SearchResult<Anime | null>> {
   }
 }
 
-export { searchAnimeQuery, searchAnime, getAnimeById };
+export { getAnimeByIds, searchAnime };

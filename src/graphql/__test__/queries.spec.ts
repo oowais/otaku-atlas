@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { getAnimeById, searchAnime } from "@/graphql/queries";
+import { getAnimeByIds, searchAnime } from "@/graphql/queries";
 import { client } from "@/graphql/urql-client";
 
 vi.mock("@/graphql/urql-client", () => ({
@@ -9,7 +9,6 @@ vi.mock("@/graphql/urql-client", () => ({
   },
 }));
 
-// Mock console to avoid noise in tests
 vi.spyOn(console, "error").mockImplementation(() => {});
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -53,7 +52,9 @@ describe("searchAnime", () => {
 
     const result = await searchAnime("Attack");
 
-    expect(client.query).toHaveBeenCalledWith(expect.any(Object), { search: "Attack" });
+    expect(client.query).toHaveBeenCalledWith(expect.any(Object), {
+      search: "Attack",
+    });
     expect(result).toEqual({
       success: true,
       data: mockData.Page.media,
@@ -140,57 +141,73 @@ describe("searchAnime", () => {
   });
 });
 
-describe("getAnimeById", () => {
+describe("getAnimeByIds", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
   it("should return successful result with anime data", async () => {
     const mockData = {
-      Media: {
-        id: 1,
-        title: {
-          romaji: "Shingeki no Kyojin",
-          english: "Attack on Titan",
-        },
-        description: "Humanity fights for survival against giants",
+      Page: {
+        media: [
+          {
+            id: 1,
+            title: {
+              romaji: "Shingeki no Kyojin",
+              english: "Attack on Titan",
+            },
+            description: "Humanity fights for survival against giants",
+          },
+          {
+            id: 2,
+            title: {
+              romaji: "Shingeki no Kyojin",
+              english: "Attack on Titan",
+            },
+            description: "Humanity fights for survival against giants",
+          },
+        ],
       },
     };
 
     vi.mocked(client.query).mockResolvedValue(createMockQueryResult(mockData));
 
-    const result = await getAnimeById(1);
+    const result = await getAnimeByIds([1, 2]);
 
-    expect(client.query).toHaveBeenCalledWith(expect.any(Object), { id: 1 });
+    expect(client.query).toHaveBeenCalledWith(expect.any(Object), {
+      ids: [1, 2],
+    });
     expect(result).toEqual({
       success: true,
-      data: mockData.Media,
+      data: mockData.Page.media,
     });
   });
 
   it("should return null when anime not found", async () => {
     const mockData = {
-      Media: null,
+      Page: {
+        media: null,
+      },
     };
 
     vi.mocked(client.query).mockResolvedValue(createMockQueryResult(mockData));
 
-    const result = await getAnimeById(99999);
+    const result = await getAnimeByIds([99999]);
 
     expect(result).toEqual({
       success: true,
-      data: null,
+      data: [],
     });
   });
 
   it("should handle undefined data", async () => {
     vi.mocked(client.query).mockResolvedValue(createMockQueryResult(undefined));
 
-    const result = await getAnimeById(1);
+    const result = await getAnimeByIds([1]);
 
     expect(result).toEqual({
       success: true,
-      data: null,
+      data: [],
     });
   });
 
@@ -198,7 +215,7 @@ describe("getAnimeById", () => {
     const queryError = new Error("GraphQL error");
     vi.mocked(client.query).mockRejectedValue(queryError);
 
-    const result = await getAnimeById(1);
+    const result = await getAnimeByIds([1]);
 
     expect(console.error).toHaveBeenCalledWith(
       "Error occurred while fetching anime by ID:",
@@ -214,7 +231,7 @@ describe("getAnimeById", () => {
     const unknownError = { message: "Some object error" };
     vi.mocked(client.query).mockRejectedValue(unknownError);
 
-    const result = await getAnimeById(1);
+    const result = await getAnimeByIds([1]);
 
     expect(console.error).toHaveBeenCalledWith(
       "Error occurred while fetching anime by ID:",
@@ -232,10 +249,10 @@ describe("getAnimeById", () => {
     const mockData = { Media: null };
     vi.mocked(client.query).mockResolvedValue(createMockQueryResult(mockData));
 
-    await getAnimeById(0);
+    await getAnimeByIds([0]);
     expect(client.query).toHaveBeenCalledWith(expect.any(Object), { id: 0 });
 
-    await getAnimeById(-1);
+    await getAnimeByIds([-1]);
     expect(client.query).toHaveBeenCalledWith(expect.any(Object), { id: -1 });
   });
 });
