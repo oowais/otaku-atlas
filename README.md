@@ -2,8 +2,8 @@
 
 ## TODO
 
-- [ ] Add GraphQL support
-- [ ] Write queries to get animes/anime
+- [x] Add GraphQL support
+- [x] Write queries to search anime
 - [ ] Create composable to watchlist anime
 - [ ] Add a search bar to search anime
 - [ ] Add component to display anime details in a card
