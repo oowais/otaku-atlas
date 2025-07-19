@@ -6,7 +6,7 @@ import { client } from "@/graphql/urql-client";
 const searchAnimeQuery = graphql(`
   query ($search: String!) {
     Page {
-      media(search: $search, type: ANIME) {
+      media(search: $search, type: ANIME, sort: POPULARITY_DESC) {
         id
         title {
           romaji
@@ -27,10 +27,6 @@ const getAnimeByIdQuery = graphql(`
         english
       }
       description
-      coverImage {
-        large
-        medium
-      }
     }
   }
 `);
