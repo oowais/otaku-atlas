@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { getAnimeByIds, searchAnime } from "@/graphql/queries";
+import { getAnimeByIds } from "@/graphql/queries";
 import { client } from "@/graphql/urql-client";
 
 vi.mock("@/graphql/urql-client", () => ({
@@ -19,126 +19,6 @@ const createMockQueryResult = (data: any, error?: any) => ({
   operation: {} as any,
   stale: false,
   hasNext: false,
-});
-
-describe("searchAnime", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
-  it("should return successful result with anime data", async () => {
-    const mockData = {
-      Page: {
-        media: [
-          {
-            id: 1,
-            title: {
-              romaji: "Shingeki no Kyojin",
-              english: "Attack on Titan",
-            },
-          },
-          {
-            id: 2,
-            title: {
-              romaji: "Shingeki no Kyojin Season 2",
-              english: "Attack on Titan Season 2",
-            },
-          },
-        ],
-      },
-    };
-
-    vi.mocked(client.query).mockResolvedValue(createMockQueryResult(mockData));
-
-    const result = await searchAnime("Attack");
-
-    expect(client.query).toHaveBeenCalledWith(expect.any(Object), {
-      search: "Attack",
-    });
-    expect(result).toEqual({
-      success: true,
-      data: mockData.Page.media,
-    });
-  });
-
-  it("should return empty array when no media found", async () => {
-    const mockData = {
-      Page: {
-        media: [],
-      },
-    };
-
-    vi.mocked(client.query).mockResolvedValue(createMockQueryResult(mockData));
-
-    const result = await searchAnime("NonexistentAnime");
-
-    expect(result).toEqual({
-      success: true,
-      data: [],
-    });
-  });
-
-  it("should handle null/undefined media gracefully", async () => {
-    const mockData = {
-      Page: {
-        media: null,
-      },
-    };
-
-    vi.mocked(client.query).mockResolvedValue(createMockQueryResult(mockData));
-
-    const result = await searchAnime("test");
-
-    expect(result).toEqual({
-      success: true,
-      data: [],
-    });
-  });
-
-  it("should handle undefined data gracefully", async () => {
-    vi.mocked(client.query).mockResolvedValue(createMockQueryResult(undefined));
-
-    const result = await searchAnime("test");
-
-    expect(result).toEqual({
-      success: true,
-      data: [],
-    });
-  });
-
-  it("should handle network/query errors", async () => {
-    const networkError = new Error("Network error");
-    vi.mocked(client.query).mockRejectedValue(networkError);
-
-    const result = await searchAnime("test");
-
-    expect(console.error).toHaveBeenCalledWith(
-      "Error occurred while searching for anime:",
-      networkError,
-    );
-    expect(result).toEqual({
-      success: false,
-      error: networkError,
-    });
-  });
-
-  it("should handle unknown error types", async () => {
-    const networkError = new Error("some network error");
-    vi.mocked(client.query).mockRejectedValue(networkError);
-
-    const result = await searchAnime("test");
-
-    expect(console.error).toHaveBeenCalledWith(
-      "Error occurred while searching for anime:",
-      networkError,
-    );
-
-    expect(result.success).toBe(false);
-    if (!result.success) {
-      expect(result.error).toBeInstanceOf(Error);
-      expect(result.error.message).toBe("some network error");
-    }
-  });
 });
 
 describe("getAnimeByIds", () => {

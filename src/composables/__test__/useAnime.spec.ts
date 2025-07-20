@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { useAnime } from "@/composables/useAnime";
+import { useAnimeWatchlist } from "@/composables/useAnime";
 
 // Mock dependencies
 vi.mock("pinia", () => ({
@@ -15,7 +15,7 @@ vi.mock("@/stores/watchlist", () => ({
   useWatchlistStore: vi.fn(),
 }));
 
-describe("useAnime", async () => {
+describe("useAnimeWatchlist", async () => {
   const mockStoreToRefs = vi.mocked(await import("pinia")).storeToRefs;
   const mockGetAnimeByIds = vi.mocked(
     await import("@/graphql/queries"),
@@ -32,7 +32,7 @@ describe("useAnime", async () => {
         watchlist: { value: [] },
       });
 
-      const { getWatchlistedAnime } = useAnime();
+      const { getWatchlistedAnime } = useAnimeWatchlist();
       const result = await getWatchlistedAnime();
 
       expect(result).toEqual([]);
@@ -46,7 +46,7 @@ describe("useAnime", async () => {
       });
       mockGetAnimeByIds.mockResolvedValue({ success: false });
 
-      const { getWatchlistedAnime } = useAnime();
+      const { getWatchlistedAnime } = useAnimeWatchlist();
       const result = await getWatchlistedAnime();
 
       expect(result).toBeNull();
@@ -72,7 +72,7 @@ describe("useAnime", async () => {
         data: mockAnime,
       });
 
-      const { getWatchlistedAnime } = useAnime();
+      const { getWatchlistedAnime } = useAnimeWatchlist();
       const result = await getWatchlistedAnime();
 
       expect(result).toEqual([
@@ -103,7 +103,7 @@ describe("useAnime", async () => {
         data: mockAnime,
       });
 
-      const { getWatchlistedAnime } = useAnime();
+      const { getWatchlistedAnime } = useAnimeWatchlist();
       const result = await getWatchlistedAnime();
 
       expect(result).toEqual([
@@ -130,7 +130,7 @@ describe("useAnime", async () => {
         data: mockAnime,
       });
 
-      const { getWatchlistedAnime } = useAnime();
+      const { getWatchlistedAnime } = useAnimeWatchlist();
       const result = await getWatchlistedAnime();
 
       expect(result).toEqual([]);

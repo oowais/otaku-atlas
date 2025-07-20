@@ -7,10 +7,18 @@ import {
 } from "@/graphql/types";
 import { client } from "@/graphql/urql-client";
 
+const PER_PAGE = window.innerWidth < 768 ? 12 : 16;
+
 const searchAnimeQuery = graphql(
   `
-    query ($search: String!) {
-      Page {
+    query ($search: String!, $page: Int!, $perPage: Int!) {
+      Page(page: $page, perPage: $perPage) {
+        pageInfo {
+          hasNextPage
+          currentPage
+          total
+          perPage
+        }
         media(search: $search, type: ANIME, sort: POPULARITY_DESC) {
           ...AnimeFields
         }
@@ -20,28 +28,16 @@ const searchAnimeQuery = graphql(
   [animeFieldsFragment],
 );
 
-async function searchAnime(search: string): Promise<SearchResult<Anime[]>> {
-  try {
-    const result = await client.query(searchAnimeQuery, { search });
-    const anime = result.data?.Page?.media ?? [];
-    const filteredAnime = anime.filter((item) => item !== null);
-    return {
-      success: true,
-      data: filteredAnime,
-    };
-  } catch (error) {
-    console.error("Error occurred while searching for anime:", error);
-    return {
-      success: false,
-      error: error instanceof Error ? error : new Error("Unknown error"),
-    };
-  }
-}
-
 const getAnimeByIdsQuery = graphql(
   `
-    query ($ids: [Int!]!) {
-      Page {
+    query ($ids: [Int!]!, $page: Int!, $perPage: Int!) {
+      Page(page: $page, perPage: $perPage) {
+        pageInfo {
+          hasNextPage
+          currentPage
+          total
+          perPage
+        }
         media(id_in: $ids, type: ANIME) {
           ...AnimeFields
         }
@@ -53,7 +49,11 @@ const getAnimeByIdsQuery = graphql(
 
 async function getAnimeByIds(ids: number[]): Promise<SearchResult<Anime[]>> {
   try {
-    const result = await client.query(getAnimeByIdsQuery, { ids });
+    const result = await client.query(getAnimeByIdsQuery, {
+      ids,
+      page: 1,
+      perPage: 5,
+    });
     const anime = result.data?.Page?.media ?? [];
     const filteredAnime = anime.filter((item) => item !== null);
     return {
@@ -69,4 +69,4 @@ async function getAnimeByIds(ids: number[]): Promise<SearchResult<Anime[]>> {
   }
 }
 
-export { getAnimeByIds, searchAnime };
+export { getAnimeByIds, getAnimeByIdsQuery, PER_PAGE, searchAnimeQuery };

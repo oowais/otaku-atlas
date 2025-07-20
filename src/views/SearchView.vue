@@ -1,5 +1,4 @@
-<template><anime-search /></template>
-
-<script setup lang="ts">
-import AnimeSearch from "@/components/AnimeSearch.vue";
-</script>
+<template>
+  <AnimeSearch />
+  <AnimeResults class="mt-8" />
+</template>

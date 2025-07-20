@@ -4,7 +4,7 @@ import { getAnimeByIds } from "@/graphql/queries";
 import type { AnimeWatchlist } from "@/stores/types";
 import { useWatchlistStore } from "@/stores/watchlist";
 
-const useAnime = () => {
+const useAnimeWatchlist = () => {
   async function getWatchlistedAnime(): Promise<AnimeWatchlist[] | null> {
     const { animeIds, watchlist } = storeToRefs(useWatchlistStore());
     if (!animeIds.value.length) return [];
@@ -35,4 +35,4 @@ const useAnime = () => {
   return { getWatchlistedAnime };
 };
 
-export { useAnime };
+export { useAnimeWatchlist };

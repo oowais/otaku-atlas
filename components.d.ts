@@ -8,7 +8,12 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    Alert: typeof import('./src/components/ui/alert/Alert.vue')['default']
+    AlertDescription: typeof import('./src/components/ui/alert/AlertDescription.vue')['default']
+    AlertTitle: typeof import('./src/components/ui/alert/AlertTitle.vue')['default']
     AnimeCard: typeof import('./src/components/AnimeCard.vue')['default']
+    AnimeDetails: typeof import('./src/components/AnimeDetails.vue')['default']
+    AnimeResults: typeof import('./src/components/AnimeResults.vue')['default']
     AnimeSearch: typeof import('./src/components/AnimeSearch.vue')['default']
     Button: typeof import('./src/components/ui/button/Button.vue')['default']
     DropdownMenu: typeof import('./src/components/ui/dropdown-menu/DropdownMenu.vue')['default']
@@ -25,6 +30,7 @@ declare module 'vue' {
     DropdownMenuSubContent: typeof import('./src/components/ui/dropdown-menu/DropdownMenuSubContent.vue')['default']
     DropdownMenuSubTrigger: typeof import('./src/components/ui/dropdown-menu/DropdownMenuSubTrigger.vue')['default']
     DropdownMenuTrigger: typeof import('./src/components/ui/dropdown-menu/DropdownMenuTrigger.vue')['default']
+    Input: typeof import('./src/components/ui/input/Input.vue')['default']
     NavigationBar: typeof import('./src/components/NavigationBar.vue')['default']
     NavigationMenu: typeof import('./src/components/ui/navigation-menu/NavigationMenu.vue')['default']
     NavigationMenuContent: typeof import('./src/components/ui/navigation-menu/NavigationMenuContent.vue')['default']
@@ -36,6 +42,17 @@ declare module 'vue' {
     NavigationMenuViewport: typeof import('./src/components/ui/navigation-menu/NavigationMenuViewport.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    Separator: typeof import('./src/components/ui/separator/Separator.vue')['default']
+    Skeleton: typeof import('./src/components/ui/skeleton/Skeleton.vue')['default']
+    Table: typeof import('./src/components/ui/table/Table.vue')['default']
+    TableBody: typeof import('./src/components/ui/table/TableBody.vue')['default']
+    TableCaption: typeof import('./src/components/ui/table/TableCaption.vue')['default']
+    TableCell: typeof import('./src/components/ui/table/TableCell.vue')['default']
+    TableEmpty: typeof import('./src/components/ui/table/TableEmpty.vue')['default']
+    TableFooter: typeof import('./src/components/ui/table/TableFooter.vue')['default']
+    TableHead: typeof import('./src/components/ui/table/TableHead.vue')['default']
+    TableHeader: typeof import('./src/components/ui/table/TableHeader.vue')['default']
+    TableRow: typeof import('./src/components/ui/table/TableRow.vue')['default']
     ThemeSwitcher: typeof import('./src/components/ThemeSwitcher.vue')['default']
   }
 }
