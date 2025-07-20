@@ -61,7 +61,12 @@
         </TableRow>
       </TableHeader>
       <TableBody>
-        <TableRow v-for="entry in searchResults" :key="entry.id">
+        <TableRow
+          v-for="entry in searchResults"
+          :key="entry.id"
+          @click="emit('open-drawer', entry.id)"
+          class="cursor-pointer"
+        >
           <TableCell class="font-medium px-2">
             {{ entry.startDate?.year || "" }}
           </TableCell>
@@ -107,6 +112,10 @@ import { useTemplateRef } from "vue";
 
 import { useSearchStore } from "@/stores/search";
 import { formatStatus } from "@/utils/formatters";
+
+const emit = defineEmits<{
+  (e: "open-drawer", id: number): void;
+}>();
 
 const containerRef = useTemplateRef<HTMLElement>("container");
 
