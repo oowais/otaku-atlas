@@ -105,6 +105,10 @@ const useWatchlistStore = defineStore("watchlist", () => {
     }
   }
 
+  const getWatchlistEntry = (animeId: number): WatchlistEntry | undefined => {
+    return watchlist.value.find((entry) => animeId === entry.animeId);
+  };
+
   return {
     watchlist: readonly(watchlist),
     isLoading: readonly(isLoading),
@@ -113,9 +117,10 @@ const useWatchlistStore = defineStore("watchlist", () => {
     animeIds,
 
     addToWatchlist,
+    getWatchlistEntry,
+    removeFromWatchlist,
     updateStatus,
     updateScore,
-    removeFromWatchlist,
   };
 });
 
