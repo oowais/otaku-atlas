@@ -48,7 +48,7 @@
       <TableCaption>Search results</TableCaption>
       <colgroup>
         <col class="w-16 sm:w-20" />
-        <col class="w-12" />
+        <col class="w-12 sm:w-22" />
         <col class="w-auto" />
         <col class="w-20 hidden md:table-cell" />
       </colgroup>
@@ -70,7 +70,7 @@
               v-if="entry.coverImage?.medium"
               :src="entry.coverImage?.medium"
               alt="Anime Cover"
-              class="w-10 h-10 rounded object-scale-down"
+              class="w-10 h-10 sm:w-20 sm:h-20 rounded object-scale-down"
             />
           </TableCell>
           <TableCell>
