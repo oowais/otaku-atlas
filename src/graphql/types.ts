@@ -11,16 +11,11 @@ const animeFieldsFragment = graphql(`
     status
     startDate {
       year
-      month
-      day
     }
     endDate {
       year
-      month
-      day
     }
     averageScore
-    popularity
     coverImage {
       large
       medium

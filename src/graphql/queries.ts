@@ -47,6 +47,7 @@ const getAnimeByIdsQuery = graphql(
   [animeFieldsFragment],
 );
 
+// TODO: move this to useAnime.ts
 async function getAnimeByIds(ids: number[]): Promise<SearchResult<Anime[]>> {
   try {
     const result = await client.query(getAnimeByIdsQuery, {

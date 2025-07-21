@@ -1,7 +1,7 @@
 <template>
   <AnimeSearch />
   <AnimeResults class="mt-8" @open-drawer="handleOpenDrawer" />
-  <AnimeDetails :animeId :key="drawerKey" />
+  <AnimeDetails :animeId="animeId" :key="drawerKey" />
 </template>
 
 <script setup lang="ts">

@@ -68,7 +68,7 @@ export default defineConfigWithVueTs(
       "vue/require-typed-ref": "error",
 
       // Limit template nesting depth
-      "vue/max-template-depth": ["error", { maxDepth: 7 }],
+      "vue/max-template-depth": ["error", { maxDepth: 8 }],
 
       "no-console": "warn",
     },

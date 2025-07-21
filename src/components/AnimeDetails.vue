@@ -1,23 +1,53 @@
 <template>
   <Drawer v-model:open="openDrawer">
     <DrawerContent>
-      <DrawerHeader>
-        <img
-          v-if="anime?.coverImage?.large"
-          :src="anime?.coverImage?.large"
-          alt="Anime Cover"
-          class="w-40 h-40 sm:w-30 sm:h-30 rounded object-scale-down"
-        />
-        <DrawerTitle>{{ anime?.title?.romaji }}</DrawerTitle>
-        <DrawerDescription> {{ anime?.description }}</DrawerDescription>
-        <!-- more details, user status, score -->
-      </DrawerHeader>
-      <DrawerFooter>
-        <Button>Add to Watchlist</Button>
-        <DrawerClose>
-          <Button variant="outline"> Close </Button>
-        </DrawerClose>
-      </DrawerFooter>
+      <div class="mx-auto w-full max-w-md">
+        <DrawerHeader>
+          <DrawerTitle class="py-2">{{ anime?.title?.romaji }}</DrawerTitle>
+          <div class="flex gap-2 text-sm">
+            <img
+              v-if="anime?.coverImage?.large"
+              :src="anime?.coverImage?.large"
+              alt="Anime Cover"
+              class="w-60 h-60 sm:w-40 sm:h-40 object-scale-down"
+            />
+            <div class="flex flex-col">
+              <DrawerTitle class="text-xs text-muted-foreground">
+                {{ anime?.title?.english }}
+              </DrawerTitle>
+              <template v-if="anime?.averageScore">
+                Score:
+                {{ anime.averageScore + "%" }}
+              </template>
+              <Separator class="my-2" />
+              <div class="flex justify-between">
+                <template v-if="anime?.startDate?.year">
+                  {{ anime.startDate.year }} -
+                  {{ anime?.endDate?.year || "now" }}
+                </template>
+                <Badge v-if="anime?.status">
+                  {{ formatStatus(anime?.status) }}
+                </Badge>
+              </div>
+            </div>
+          </div>
+
+          <DrawerDescription v-if="anime?.description" class="mt-2">
+            Description
+            <ScrollArea
+              class="max-h-[200px] min-h-0 rounded-md border p-2 overflow-auto"
+            >
+              {{ anime?.description }}
+            </ScrollArea>
+          </DrawerDescription>
+        </DrawerHeader>
+        <DrawerFooter>
+          <Button>Add to Watchlist</Button>
+          <DrawerClose>
+            <Button variant="outline"> Close </Button>
+          </DrawerClose>
+        </DrawerFooter>
+      </div>
     </DrawerContent>
   </Drawer>
 </template>
@@ -30,6 +60,7 @@ import { getAnimeById } from "@/graphql/queries";
 import type { Anime } from "@/graphql/types";
 import type { WatchlistEntry } from "@/stores/types";
 import { useWatchlistStore } from "@/stores/watchlist";
+import { formatStatus } from "@/utils/formatters";
 
 const props = withDefaults(
   defineProps<{
