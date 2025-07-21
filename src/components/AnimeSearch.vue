@@ -14,7 +14,12 @@
     >
       <Search class="size-6 text-muted-foreground" />
     </span>
-    <Button v-if="searchTerm" class="py-7" variant="ghost" @click="clearSearch">
+    <Button
+      v-if="searchTerm"
+      class="py-7"
+      variant="outline"
+      @click="clearSearch"
+    >
       <X class="size-6" />
     </Button>
   </div>
