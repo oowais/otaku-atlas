@@ -22,14 +22,14 @@
       </Alert>
     </template>
     <Table v-else-if="results.length > 0" class="w-full table-fixed">
-      <TableCaption>Search results</TableCaption>
+      <TableCaption>Your watchlist</TableCaption>
       <colgroup>
         <col class="w-35 sm:w-40" />
         <col class="w-auto" />
       </colgroup>
       <TableHeader>
         <TableRow>
-          <TableHead> Status </TableHead>
+          <TableHead>Status</TableHead>
           <TableHead>Name</TableHead>
         </TableRow>
       </TableHeader>
@@ -40,7 +40,7 @@
           @click="
             () => {
               selectedAnimeId = entry.id;
-              openDrawer = true;
+              drawerKey++;
             }
           "
           class="cursor-pointer"
@@ -69,11 +69,7 @@
       </p>
     </div>
   </div>
-  <AnimeDetails
-    v-if="openDrawer"
-    :anime-id="selectedAnimeId"
-    @close="openDrawer = false"
-  />
+  <AnimeDetails :anime-id="selectedAnimeId" :key="drawerKey" />
 </template>
 
 <script setup lang="ts">
@@ -83,14 +79,14 @@ import { onMounted, ref, useTemplateRef } from "vue";
 
 import { useAnimeWatchlist } from "@/composables/useAnimeWatchlist";
 
+const drawerKey = ref(0);
+const selectedAnimeId = ref<number | null>(null);
 const containerRef = useTemplateRef<HTMLElement>("container");
+
 const { loadAnime, loadMore, error, loading, results, hasNextPage } =
   useAnimeWatchlist();
 
 onMounted(loadAnime);
-
-const openDrawer = ref(false);
-const selectedAnimeId = ref<number | null>(null);
 
 useInfiniteScroll(containerRef, loadMore, {
   distance: 10,

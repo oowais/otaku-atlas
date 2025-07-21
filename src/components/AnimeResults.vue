@@ -38,7 +38,7 @@
       </colgroup>
       <TableHeader>
         <TableRow>
-          <TableHead> Year </TableHead>
+          <TableHead>Year</TableHead>
           <TableHead><Image /></TableHead>
           <TableHead>Name</TableHead>
           <TableHead class="text-right hidden md:table-cell">Status</TableHead>
@@ -48,7 +48,12 @@
         <TableRow
           v-for="entry in searchResults"
           :key="entry.id"
-          @click="emit('open-drawer', entry.id)"
+          @click="
+            () => {
+              selectedAnimeId = entry.id;
+              drawerKey++;
+            }
+          "
           class="cursor-pointer"
         >
           <TableCell class="font-medium px-2">
@@ -88,21 +93,20 @@
       </p>
     </div>
   </div>
+  <AnimeDetails :anime-id="selectedAnimeId" :key="drawerKey" />
 </template>
 
 <script setup lang="ts">
 import { useInfiniteScroll } from "@vueuse/core";
 import { AlertCircle, Image, TriangleAlert } from "lucide-vue-next";
 import { storeToRefs } from "pinia";
-import { useTemplateRef } from "vue";
+import { ref, useTemplateRef } from "vue";
 
 import { useSearchStore } from "@/stores/search";
 import { formatStatus, getStatusButtonClass } from "@/utils/formatters";
 
-const emit = defineEmits<{
-  (e: "open-drawer", id: number): void;
-}>();
-
+const drawerKey = ref(0);
+const selectedAnimeId = ref<number | null>(null);
 const containerRef = useTemplateRef<HTMLElement>("container");
 
 const { searchResults, currentSearchTerm, loading, error, hasNextPage } =
