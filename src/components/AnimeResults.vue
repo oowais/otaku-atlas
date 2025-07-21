@@ -1,7 +1,7 @@
 <template>
   <div class="flex-1 min-h-[400px] overflow-y-auto">
     <template v-if="loading && searchResults.length === 0">
-      <TableSkeleton />
+      <TableSkeleton class="pt-8" />
     </template>
     <template v-if="error">
       <Alert variant="destructive">
@@ -20,7 +20,7 @@
         !error
       "
     >
-      <Alert>
+      <Alert class="mt-2">
         <TriangleAlert class="w-4 h-4" />
         <AlertTitle> Zilch! </AlertTitle>
         <AlertDescription>
