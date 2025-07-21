@@ -1,7 +1,11 @@
 <template>
   <DropdownMenu>
     <DropdownMenuTrigger as-child>
-      <Button :class="getStatusButtonClass(currentStatus)" @click.stop>
+      <Button
+        :class="getStatusButtonClass(currentStatus)"
+        @click.stop
+        class="text-xs"
+      >
         {{ formatUserStatus(currentStatus) }}
       </Button>
     </DropdownMenuTrigger>
