@@ -1,6 +1,6 @@
 <template>
-  <div class="flex-1 min-h-[500px] overflow-y-auto">
-    <template v-if="loading">
+  <div class="flex-1 min-h-[400px] overflow-y-auto">
+    <template v-if="loading && searchResults.length === 0">
       <div class="flex flex-col space-y-4">
         <!-- Header -->
         <div class="flex space-x-4 pb-2 border-b border-border">
@@ -87,7 +87,9 @@
             </p>
           </TableCell>
           <TableCell class="text-right hidden md:block">
-            {{ formatStatus(entry.status) }}
+            <Badge :class="getStatusButtonClass(entry?.status)">
+              {{ formatStatus(entry?.status) }}
+            </Badge>
           </TableCell>
         </TableRow>
       </TableBody>
@@ -111,7 +113,7 @@ import { storeToRefs } from "pinia";
 import { useTemplateRef } from "vue";
 
 import { useSearchStore } from "@/stores/search";
-import { formatStatus } from "@/utils/formatters";
+import { formatStatus, getStatusButtonClass } from "@/utils/formatters";
 
 const emit = defineEmits<{
   (e: "open-drawer", id: number): void;
