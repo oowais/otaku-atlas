@@ -69,4 +69,39 @@ async function getAnimeByIds(ids: number[]): Promise<SearchResult<Anime[]>> {
   }
 }
 
-export { getAnimeByIds, getAnimeByIdsQuery, PER_PAGE, searchAnimeQuery };
+const getAnimeByIdQuery = graphql(
+  `
+    query ($id: Int!) {
+      Media(id: $id, type: ANIME) {
+        ...AnimeFields
+      }
+    }
+  `,
+  [animeFieldsFragment],
+);
+
+async function getAnimeById(id: number): Promise<SearchResult<Anime | null>> {
+  try {
+    const result = await client.query(getAnimeByIdQuery, { id });
+
+    return {
+      success: true,
+      data: result.data?.Media ?? null,
+    };
+  } catch (error) {
+    console.error("Error occurred while fetching anime by ID:", error);
+
+    return {
+      success: false,
+      error: error instanceof Error ? error : new Error("Unknown error"),
+    };
+  }
+}
+
+export {
+  getAnimeById,
+  getAnimeByIds,
+  getAnimeByIdsQuery,
+  PER_PAGE,
+  searchAnimeQuery,
+};

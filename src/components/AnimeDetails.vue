@@ -2,8 +2,14 @@
   <Drawer v-model:open="openDrawer">
     <DrawerContent>
       <DrawerHeader>
-        <DrawerTitle>Anime Details</DrawerTitle>
-        <DrawerDescription>Desc.</DrawerDescription>
+        <img
+          v-if="anime?.coverImage?.large"
+          :src="anime?.coverImage?.large"
+          alt="Anime Cover"
+          class="w-40 h-40 sm:w-30 sm:h-30 rounded object-scale-down"
+        />
+        <DrawerTitle>{{ anime?.title?.romaji }}</DrawerTitle>
+        <DrawerDescription> {{ anime?.description }}</DrawerDescription>
         <!-- more details, user status, score -->
       </DrawerHeader>
       <DrawerFooter>
@@ -17,30 +23,41 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { onMounted, ref } from "vue";
+import { toast } from "vue-sonner";
+
+import { getAnimeById } from "@/graphql/queries";
+import type { Anime } from "@/graphql/types";
+import type { WatchlistEntry } from "@/stores/types";
+import { useWatchlistStore } from "@/stores/watchlist";
 
 const props = withDefaults(
   defineProps<{
-    open: number | null;
+    animeId: number | null;
   }>(),
-  {
-    open: null,
-  },
+  { animeId: null },
 );
 
-const openDrawer = ref(!!props.open);
-watch(
-  () => props.open,
-  async (newValue) => {
-    if (newValue === null) {
-      openDrawer.value = false;
-      return;
-    }
-    await loadAnimeDetails(newValue);
-    openDrawer.value = !!newValue;
-  },
-);
+const openDrawer = ref(false);
+const anime = ref<Anime | null>(null);
+const watchlistEntry = ref<WatchlistEntry | null>(null);
 
-// TODO: combine getAnimeById and with useWatchlist
-function loadAnimeDetails(id: number) {}
+const { getWatchlistEntry } = useWatchlistStore();
+
+onMounted(() => {
+  if (props.animeId) loadAnimeDetails(props.animeId);
+});
+
+async function loadAnimeDetails(id: number) {
+  const result = await getAnimeById(id);
+
+  if (!result.success) {
+    toast.error("Failed to load details");
+    return;
+  }
+  anime.value = result.data || null;
+  watchlistEntry.value = getWatchlistEntry(id) || null;
+
+  openDrawer.value = true;
+}
 </script>
