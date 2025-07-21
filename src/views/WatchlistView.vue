@@ -75,16 +75,18 @@
 <script setup lang="ts">
 import { useInfiniteScroll } from "@vueuse/core";
 import { AlertCircle, TriangleAlert } from "lucide-vue-next";
+import { storeToRefs } from "pinia";
 import { onMounted, ref, useTemplateRef } from "vue";
 
-import { useAnimeWatchlist } from "@/composables/useAnimeWatchlist";
+import { useWatchlistStore } from "@/stores/watchlist";
 
 const drawerKey = ref(0);
 const selectedAnimeId = ref<number | null>(null);
 const containerRef = useTemplateRef<HTMLElement>("container");
 
-const { loadAnime, loadMore, error, loading, results, hasNextPage } =
-  useAnimeWatchlist();
+const { loadAnime, loadMore } = useWatchlistStore();
+const { error, loading, results, hasNextPage } =
+  storeToRefs(useWatchlistStore());
 
 onMounted(loadAnime);
 
