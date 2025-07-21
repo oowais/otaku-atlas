@@ -9,7 +9,8 @@ const props = withDefaults(defineProps<DrawerRootProps>(), {
 
 const emits = defineEmits<DrawerRootEmits>();
 
-const forwarded = useForwardPropsEmits(props, emits);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const forwarded = useForwardPropsEmits(props, emits) as any;
 </script>
 
 <template>

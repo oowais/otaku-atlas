@@ -1,7 +1,3 @@
-<script setup lang="ts">
-import { navigationMenuTriggerStyle } from "@/components/ui/navigation-menu";
-</script>
-
 <template>
   <div class="relative border-blue-2">
     <nav class="flex flex-row xs:flex-col">
@@ -12,7 +8,7 @@ import { navigationMenuTriggerStyle } from "@/components/ui/navigation-menu";
               href="/"
               :class="[
                 navigationMenuTriggerStyle(),
-                $route.path === '/' ? 'border-2' : '',
+                route.path === '/' ? 'border-2' : '',
               ]"
             >
               Search
@@ -23,7 +19,7 @@ import { navigationMenuTriggerStyle } from "@/components/ui/navigation-menu";
               href="/watchlist"
               :class="[
                 navigationMenuTriggerStyle(),
-                $route.path === '/watchlist' ? 'border-2' : '',
+                route.path === '/watchlist' ? 'border-2' : '',
               ]"
             >
               Watchlist
@@ -37,3 +33,11 @@ import { navigationMenuTriggerStyle } from "@/components/ui/navigation-menu";
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+import { useRoute } from "vue-router";
+
+import { navigationMenuTriggerStyle } from "@/components/ui/navigation-menu";
+
+const route = useRoute();
+</script>
