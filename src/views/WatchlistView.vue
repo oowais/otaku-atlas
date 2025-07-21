@@ -93,7 +93,7 @@ onMounted(loadAnime);
 useInfiniteScroll(containerRef, loadMore, {
   distance: 10,
   canLoadMore: () => {
-    return hasNextPage.value && !loading.value;
+    return hasNextPage.value && !loading.value && !error.value;
   },
 });
 </script>
