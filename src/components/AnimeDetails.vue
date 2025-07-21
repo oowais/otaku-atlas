@@ -1,6 +1,5 @@
 <template>
-  <Drawer v-model:open="openDrawer">
-    <!-- <DetailsSkeleton v-if="loading" /> -->
+  <Drawer v-model:open="drawerState">
     <DrawerContent>
       <div class="mx-auto w-full max-w-md">
         <DrawerHeader>
@@ -43,8 +42,8 @@
               </template>
               <template v-if="anime?.averageScore">
                 <Separator class="my-2" />
-                Score:
-                {{ anime.averageScore + "%" }}
+                Rating
+                {{ anime.averageScore / 10 + "/10" }}
               </template>
               <template v-if="anime?.startDate?.year">
                 <Separator class="my-2" />
@@ -110,18 +109,21 @@ const props = withDefaults(
   defineProps<{
     animeId: number | null;
   }>(),
-  { animeId: null, open: false },
+  { animeId: null },
 );
 
-const openDrawer = ref(false);
+const drawerState = ref(false);
 const anime = ref<Anime | null>(null);
 const loading = ref(false);
 
 onMounted(() => {
   if (props.animeId) {
-    openDrawer.value = true;
+    drawerState.value = true;
     loadAnimeDetails(props.animeId);
-  } else openDrawer.value = false;
+  } else {
+    drawerState.value = false;
+    anime.value = null;
+  }
 });
 
 async function loadAnimeDetails(id: number) {
@@ -130,6 +132,7 @@ async function loadAnimeDetails(id: number) {
 
   if (!result.success) {
     toast.error("Failed to load details");
+    anime.value = null;
     loading.value = false;
     return;
   }
