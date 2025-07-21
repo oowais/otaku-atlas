@@ -24,15 +24,20 @@
       <main class="pb-8">
         <RouterView />
       </main>
+      <Toaster />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import "vue-sonner/style.css";
+
 import { useWindowScroll } from "@vueuse/core";
 import { ArrowUp } from "lucide-vue-next";
 import { computed } from "vue";
 import { RouterView } from "vue-router";
+
+import { Toaster } from "@/components/ui/sonner";
 
 const { y } = useWindowScroll();
 const MAX_SCROLL = 300;
