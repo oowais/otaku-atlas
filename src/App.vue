@@ -17,11 +17,7 @@
         <NavigationBar />
       </nav>
 
-      <button
-        ref="backToTopButton"
-        class="fixed bottom-5 right-5 hidden rounded-md border border-secondary-900"
-        @click="backToTop"
-      >
+      <button :class="scrollToTopButtonClass" @click="scrollToTop">
         <ArrowUp class="w-8 h-8" />
       </button>
 
@@ -33,21 +29,21 @@
 </template>
 
 <script setup lang="ts">
+import { useWindowScroll } from "@vueuse/core";
 import { ArrowUp } from "lucide-vue-next";
-import { useTemplateRef } from "vue";
+import { computed } from "vue";
 import { RouterView } from "vue-router";
 
-const backToTopButtonRef = useTemplateRef<HTMLButtonElement>("backToTopButton");
+const { y } = useWindowScroll();
+const MAX_SCROLL = 300;
 
-const scrollFunction = () => {
-  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20)
-    backToTopButtonRef.value?.classList.remove("hidden");
-  else backToTopButtonRef.value?.classList.add("hidden");
-};
+const scrollToTopButtonClass = computed(() => {
+  return y.value < MAX_SCROLL
+    ? "hidden"
+    : "fixed bottom-5 right-5 block rounded-md border border-secondary-900 z-50";
+});
 
-const backToTop = () => {
+const scrollToTop = () => {
   window.scrollTo({ top: 0, behavior: "smooth" });
 };
-
-window.addEventListener("scroll", scrollFunction);
 </script>
