@@ -51,15 +51,15 @@ const currentStatus = computed(() => watchlist.value[props.animeId]);
 function getStatusButtonClass(status: UserStatus) {
   switch (status) {
     case "watching":
-      return "bg-blue-800 text-white";
+      return "bg-blue-800 hover:bg-blue-600 cursor-pointer text-white";
     case "completed":
-      return "bg-green-800 text-white";
+      return "bg-green-800 hover:bg-green-600 cursor-pointer text-white";
     case "planToWatch":
-      return "bg-yellow-800 text-white";
+      return "bg-yellow-800 hover:bg-yellow-600 cursor-pointer text-white";
     case "onHold":
-      return "bg-orange-800 text-white";
+      return "bg-orange-800 hover:bg-orange-600 cursor-pointer text-white";
     case "dropped":
-      return "bg-red-800 text-white";
+      return "bg-red-800 hover:bg-red-600 cursor-pointer text-white";
     default:
       return "bg-gray-200 text-gray-800";
   }
