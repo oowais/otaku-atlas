@@ -14,11 +14,7 @@ const useSearchStore = defineStore("search", () => {
   const totalResults = ref(0);
   const currentSearchTerm = ref("");
 
-  const searchAnime = async (
-    searchTerm: string,
-    page = 1,
-    perPage = PER_PAGE,
-  ) => {
+  async function searchAnime(searchTerm: string, page = 1, perPage = PER_PAGE) {
     currentSearchTerm.value = searchTerm;
     if (!searchTerm.trim()) {
       searchResults.value = [];
@@ -54,21 +50,14 @@ const useSearchStore = defineStore("search", () => {
     } finally {
       loading.value = false;
     }
-  };
+  }
 
   const loadMore = async () => {
     if (!hasNextPage.value || loading.value) return;
-    console.log(
-      "Loading more results...",
-      currentSearchTerm.value,
-      currentPage.value + 1,
-    );
-
     await searchAnime(currentSearchTerm.value, currentPage.value + 1);
   };
 
   const clearResults = () => {
-    console.log("Clearing search results");
     searchResults.value = [];
     currentPage.value = 1;
     hasNextPage.value = false;

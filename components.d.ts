@@ -65,6 +65,7 @@ declare module 'vue' {
     TableHead: typeof import('./src/components/ui/table/TableHead.vue')['default']
     TableHeader: typeof import('./src/components/ui/table/TableHeader.vue')['default']
     TableRow: typeof import('./src/components/ui/table/TableRow.vue')['default']
+    TableSkeleton: typeof import('./src/components/TableSkeleton.vue')['default']
     ThemeSwitcher: typeof import('./src/components/ThemeSwitcher.vue')['default']
     UserStatusSwitcher: typeof import('./src/components/UserStatusSwitcher.vue')['default']
   }

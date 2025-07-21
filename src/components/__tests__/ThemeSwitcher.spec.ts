@@ -4,13 +4,11 @@ import { ref } from "vue";
 
 import ThemeSwitcher from "@/components/ThemeSwitcher.vue";
 
-// Mock useColorMode
 const mockMode = ref("light");
 vi.mock("@vueuse/core", () => ({
   useColorMode: () => mockMode,
 }));
 
-// Mock lucide-vue-next icons
 vi.mock("lucide-vue-next", () => ({
   Moon: {
     name: "Moon",
@@ -22,7 +20,6 @@ vi.mock("lucide-vue-next", () => ({
   },
 }));
 
-// Mock dropdown components
 const DropdownMenu = {
   name: "DropdownMenu",
   template: '<div data-testid="dropdown-menu"><slot /></div>',
@@ -62,7 +59,7 @@ describe("ThemeSwitcher", () => {
   const mountComponent = () => {
     return mount(ThemeSwitcher, {
       global: {
-        components: {
+        stubs: {
           DropdownMenu,
           DropdownMenuTrigger,
           DropdownMenuContent,

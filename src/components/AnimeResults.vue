@@ -1,23 +1,7 @@
 <template>
   <div class="flex-1 min-h-[400px] overflow-y-auto">
     <template v-if="loading && searchResults.length === 0">
-      <div class="flex flex-col space-y-4">
-        <!-- Header -->
-        <div class="flex space-x-4 pb-2 border-b border-border">
-          <Skeleton class="h-5 w-[100px]" />
-          <Skeleton class="h-5 w-12" />
-          <Skeleton class="h-5 w-32" />
-          <Skeleton class="h-5 w-20 hidden md:block" />
-        </div>
-
-        <!-- Rows -->
-        <div v-for="i in 5" :key="i" class="flex space-x-4 items-center">
-          <Skeleton class="h-4 w-[100px]" />
-          <Skeleton class="h-10 w-10 rounded" />
-          <Skeleton class="h-4 flex-1 max-w-xs" />
-          <Skeleton class="h-4 w-20 hidden md:block" />
-        </div>
-      </div>
+      <TableSkeleton />
     </template>
     <template v-if="error">
       <Alert variant="destructive">

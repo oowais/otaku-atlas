@@ -11,30 +11,8 @@ vi.mock("vue-router", () => ({
   useRoute: () => mockRoute,
 }));
 
-const NavigationMenu = {
-  name: "NavigationMenu",
-  template: '<div data-testid="navigation-menu"><slot /></div>',
-};
-const NavigationMenuList = {
-  name: "NavigationMenuList",
-  template: '<div data-testid="navigation-menu-list"><slot /></div>',
-};
-const NavigationMenuItem = {
-  name: "NavigationMenuItem",
-  template: '<div data-testid="navigation-menu-item"><slot /></div>',
-};
-const NavigationMenuLink = {
-  name: "NavigationMenuLink",
-  template: '<div data-testid="navigation-menu-link"><slot /></div>',
-};
-const ThemeSwitcher = {
-  name: "ThemeSwitcher",
-  template: '<div data-testid="theme-switcher"><slot /></div>',
-};
-
 describe("NavigationBar", () => {
   beforeEach(() => {
-    // Reset mock before each test
     mockRoute.path = "/test-path";
   });
 
@@ -43,13 +21,6 @@ describe("NavigationBar", () => {
       global: {
         mocks: {
           $route: mockRoute,
-        },
-        components: {
-          NavigationMenu,
-          NavigationMenuList,
-          NavigationMenuItem,
-          NavigationMenuLink,
-          ThemeSwitcher,
         },
       },
     });
@@ -62,7 +33,7 @@ describe("NavigationBar", () => {
 
   it("displays navigation links", () => {
     const wrapper = mountComponent();
-    const links = wrapper.findAll('[data-testid="navigation-menu-link"]');
+    const links = wrapper.findAll('[data-slot="navigation-menu-link"]');
     expect(links.length).toBe(2);
   });
 
@@ -72,20 +43,19 @@ describe("NavigationBar", () => {
     const wrapper = mountComponent();
 
     const homeLink = wrapper.find(
-      '[data-testid="navigation-menu-link"][href="/"]',
+      '[data-slot="navigation-menu-link"][href="/"]',
     );
     expect(homeLink.exists()).toBe(true);
     expect(homeLink.classes()).toContain("border-2");
   });
 
   it("does not apply border-2 class when route path is not '/'", () => {
-    // Keep mock route as non-home path
     mockRoute.path = "/anime";
 
     const wrapper = mountComponent();
 
     const homeLink = wrapper.find(
-      '[data-testid="navigation-menu-link"][href="/"]',
+      '[data-slot="navigation-menu-link"][href="/"]',
     );
     expect(homeLink.exists()).toBe(true);
     expect(homeLink.classes()).not.toContain("border-2");

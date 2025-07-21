@@ -47,29 +47,6 @@ const getAnimeByIdsQuery = graphql(
   [animeFieldsFragment],
 );
 
-// TODO: move this to useAnime.ts
-async function getAnimeByIds(ids: number[]): Promise<SearchResult<Anime[]>> {
-  try {
-    const result = await client.query(getAnimeByIdsQuery, {
-      ids,
-      page: 1,
-      perPage: 5,
-    });
-    const anime = result.data?.Page?.media ?? [];
-    const filteredAnime = anime.filter((item) => item !== null);
-    return {
-      success: true,
-      data: filteredAnime,
-    };
-  } catch (error) {
-    console.error("Error occurred while fetching anime by ID:", error);
-    return {
-      success: false,
-      error: error instanceof Error ? error : new Error("Unknown error"),
-    };
-  }
-}
-
 const getAnimeByIdQuery = graphql(
   `
     query ($id: Int!) {
@@ -99,10 +76,4 @@ async function getAnimeById(id: number): Promise<SearchResult<Anime | null>> {
   }
 }
 
-export {
-  getAnimeById,
-  getAnimeByIds,
-  getAnimeByIdsQuery,
-  PER_PAGE,
-  searchAnimeQuery,
-};
+export { getAnimeById, getAnimeByIdsQuery, PER_PAGE, searchAnimeQuery };

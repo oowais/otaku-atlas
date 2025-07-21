@@ -1,7 +1,7 @@
 <template>
   <DropdownMenu>
     <DropdownMenuTrigger as-child>
-      <Button :class="getStatusButtonClass(currentStatus)">
+      <Button :class="getStatusButtonClass(currentStatus)" @click.stop>
         {{ formatUserStatus(currentStatus) }}
       </Button>
     </DropdownMenuTrigger>
@@ -47,15 +47,15 @@ const currentStatus = computed(() => watchlist.value[props.animeId]);
 function getStatusButtonClass(status: UserStatus) {
   switch (status) {
     case "watching":
-      return "bg-blue-600 text-white";
+      return "bg-blue-800 text-white";
     case "completed":
-      return "bg-green-600 text-white";
+      return "bg-green-800 text-white";
     case "planToWatch":
-      return "bg-yellow-600 text-white";
+      return "bg-yellow-800 text-white";
     case "onHold":
-      return "bg-orange-600 text-white";
+      return "bg-orange-800 text-white";
     case "dropped":
-      return "bg-red-600 text-white";
+      return "bg-red-800 text-white";
     default:
       return "bg-gray-200 text-gray-800";
   }
